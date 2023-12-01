@@ -11,6 +11,7 @@ import validator from 'validator';
 // import { boolean, func } from 'joi';
 import bcrypt from 'bcrypt';
 import config from '../../config';
+import { Schema } from 'mongoose';
 
 const UserNameSchema = new Schema<TUserName>({
   firstName: {
