@@ -11,7 +11,7 @@ import validator from 'validator';
 // import { boolean, func } from 'joi';
 import bcrypt from 'bcrypt';
 import config from '../../config';
-import { Schema } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const UserNameSchema = new Schema<TUserName>({
   firstName: {
@@ -99,6 +99,11 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 const studentSchema = new Schema<TStudent, StudentModel>(
   {
     id: { type: String, required: [true, 'ID is required'], unique: true },
+    user: {type: Schema.Types.ObjectId,                                //connection between student and user
+      required: [true, 'User ID is required'],
+      unique: true,
+      ref: 'User',
+    },              
     password: {
       type: String,
       required: [true, 'password is required'],
@@ -163,7 +168,6 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       trim: true,
     },
     profileImage: { type: String },
-    isActive: { type: String, enum: ['active', 'blocked'], default: 'active' },
     isDeleted: { type: Boolean, default: false },
   },
   {
