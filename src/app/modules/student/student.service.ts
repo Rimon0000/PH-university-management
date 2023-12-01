@@ -1,4 +1,4 @@
-import { Student } from '../student.model';
+import { Student } from './student.model';
 import { TStudent } from './student.interface';
 
 const createStudentIntoDb = async (studentData: TStudent) => {
@@ -30,7 +30,7 @@ const getAllStudentsFromDb = async () => {
 //get single student
 const getSingleStudentFromDb = async (id: string) => {
   // const result = await Student.findOne({id})
-  const result = await Student.aggregate([{ $match: { id: id }}]);
+  const result = await Student.aggregate([{ $match: { id: id } }]);
   return result;
 };
 
