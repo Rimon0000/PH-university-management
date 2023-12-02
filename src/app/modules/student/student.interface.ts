@@ -24,8 +24,7 @@ export type TLocalGuardian = {
 
 export type TStudent = {
     id: string;
-    user: Types.ObjectId                 //connection user and student
-    password: string
+    user: Types.ObjectId                 //connection between user and student
     name: TUserName;
     gender: "male"|"female" | "other";
     dateOfBirth?: string;

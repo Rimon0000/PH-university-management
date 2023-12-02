@@ -3,7 +3,7 @@ import StudentValidationSchema from "../student/student.validation"
 import { UserServices } from "./user.service"
 
 
-const createStudent =  async(req : Request, res : Response) =>{
+const createStudent =  async(req : Request, res : Response, next: NextFunction) =>{
     try{
         //creating a schema validation using Zod
         const {password, student: studentData} = req.body
@@ -21,12 +21,8 @@ const createStudent =  async(req : Request, res : Response) =>{
             data: result
         })
 
-    }catch(error: any){
-        res.status(500).json({
-            success: false,
-            message: error.message || "something went wrong",
-            error: error
-        })
+    }catch(err){
+        next(err)
     }
 }
 
