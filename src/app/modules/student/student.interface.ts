@@ -27,7 +27,7 @@ export type TStudent = {
     user: Types.ObjectId                 //connection between user and student
     name: TUserName;
     gender: "male"|"female" | "other";
-    dateOfBirth?: string;
+    dateOfBirth?: Date;
     email: string;
     contactNo: string;
     emergencyContactNo: string;
