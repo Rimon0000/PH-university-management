@@ -14,4 +14,26 @@ const academicSemesterSchema =new Schema<TAcademicSemester>({
 }
 )
 
+//pre hook/middleware=> check same year a same nam a 2ta semester create hoice kina
+academicSemesterSchema.pre('save', async function(next) {
+    const isSemesterExists = await AcademicSemester.findOne({
+        year : this.year,
+        name : this.name,
+    }) 
+    if(isSemesterExists){
+        throw new Error('semester is already exists!!')
+    }
+    next();
+})
+
+
 export const AcademicSemester = model<TAcademicSemester>('AcademicSemester', academicSemesterSchema)
+
+
+//Name, year
+//Autumn 2030 created
+//Autumn 2030 xx
+
+//autumn 01
+//Summer 02
+//Fall 03
