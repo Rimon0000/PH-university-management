@@ -6,9 +6,9 @@ import { Months, academicSemesterCode, academicSemesterName } from "./academicSe
 const academicSemesterSchema =new Schema<TAcademicSemester>({
     name: {type: String,required: true, enum: academicSemesterName},
     code: {type: String, required: true, enum: academicSemesterCode},
-    year:{Type: Date, required: true},
-    startMonth:{Type: String, required: true, enum: Months},
-    endMonth:{Type: String, required: true, enum: Months},
+    year:{type: String, required: true},
+    startMonth:{type: String, required: true, enum: Months},
+    endMonth:{type: String, required: true, enum: Months},
 },{
     timestamps: true,
 }
