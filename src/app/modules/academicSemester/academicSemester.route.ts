@@ -7,9 +7,9 @@ const router = express.Router()
 
 //route will call controller function
 router.post('/create-academic-semester', validateRequest(academicSemesterValidations.createAcademicSemesterValidationSchema), AcademicSemesterControllers.createAcademicSemester)
+router.get('/', AcademicSemesterControllers.getAllAcademicSemester)
 
 
-// router.get('/', studentControllers.getAllStudents)
 // router.get('/:studentId', studentControllers.getSingleStudent)
 // router.delete('/:studentId', studentControllers.deleteStudent)
 
