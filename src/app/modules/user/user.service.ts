@@ -1,11 +1,13 @@
 import config from "../../config";
 import { TAcademicSemester } from "../academicSemester/academicSemester.interface";
+import { AcademicSemester } from "../academicSemester/academicSemester.model";
 import { TStudent } from "../student/student.interface";
 import { Student } from "../student/student.model";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
+import { generatedStudentId } from "./user.utils";
 
-const createStudentIntoDb = async (password: string, studentData: TStudent) => {
+const createStudentIntoDb = async (password: string, payload: TStudent) => {
     const userData: Partial<TUser> = {}
 
     //if password is not given, use default password
@@ -20,17 +22,11 @@ const createStudentIntoDb = async (password: string, studentData: TStudent) => {
     //set student role
     userData.role = "student"
 
-
-
-    //year, code and 4 digit number
-    const generatedStudentId = (payload: TAcademicSemester) =>{
-
-    }
-
-
+    //find academic semester info
+    const admissionSemester = await AcademicSemester.findById(payload.admissionSemester)
 
     //set manually generated id
-    // userData.id = generatedStudentId()
+    userData.id = generatedStudentId(admissionSemester)
 
     //create a user
     const newUser = await User.create(userData);
@@ -38,10 +34,10 @@ const createStudentIntoDb = async (password: string, studentData: TStudent) => {
     //create a student
     if(Object.keys(newUser).length){                 //array.length
         //set id, _id as user
-        studentData.id = newUser.id              //embedding
-        studentData.user = newUser._id             //referencing
+        payload.id = newUser.id              //embedding
+        payload.user = newUser._id             //referencing
 
-        const newStudent = await Student.create(studentData)
+        const newStudent = await Student.create(payload)
         return newStudent;
     }
   };
