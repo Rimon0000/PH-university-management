@@ -9,6 +9,6 @@ export const academicSemesterCode: TAcademicSemesterCode[] = ['01', '02', '03'];
 //use mapper
  export const academicSemesterNameCodeMapper: TAcademicSemesterNameCodeMapper  = {
     'Autumn': '01',
-    'summer': '02',
+    "Summer": "02",
     'Fall': '03',
 }
