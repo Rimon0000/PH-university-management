@@ -21,7 +21,7 @@ const getAllAcademicSemesterIntoDB = async() =>{
 
 //get single academic semester
 const getSingleAcademicSemesterIntoDB = async(_id: string) =>{
-    const result = AcademicSemester.findOne({_id})
+    const result = AcademicSemester.findById({_id})
     return result;
 }
 
