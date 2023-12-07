@@ -9,4 +9,26 @@ const academicDepartmentSchema = new Schema<TAcademicDepartment>({
     timestamps: true,
 })
 
+
+//pre middleware / hook for create
+academicDepartmentSchema.pre('save',async function(next){
+    const isDepartmentExist = await AcademicDepartment.findOne({name: this.name})
+    if(isDepartmentExist){
+        throw new Error('This Department is already Exists')
+    }
+    next()
+})
+
+//for update
+academicDepartmentSchema.pre('findOneAndUpdate', async function(next) {
+    const query = this.getQuery()
+
+    const isDepartmentExist = await AcademicDepartment.findOne(query)
+    if(!isDepartmentExist){
+        throw new Error('This Department does not Exist!')
+    }
+
+    next();
+})
+
 export const AcademicDepartment = model<TAcademicDepartment>('AcademicDepartment', academicDepartmentSchema)
