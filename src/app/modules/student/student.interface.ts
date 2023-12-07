@@ -38,6 +38,7 @@ export type TStudent = {
     localGuardian: TLocalGuardian;
     profileImage?: string;
     admissionSemester: Types.ObjectId;                //reference connection
+    academicDepartment: Types.ObjectId;                //reference connection
     isDeleted: boolean;
   }
 

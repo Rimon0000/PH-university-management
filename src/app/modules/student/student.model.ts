@@ -159,6 +159,10 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       type: Schema.Types.ObjectId,                    //reference connection
       ref: 'AcademicSemester'
     },
+    academicDepartment: {
+      type: Schema.Types.ObjectId,                    //reference connection
+      ref: 'AcademicDepartment'
+    },
     isDeleted: { type: Boolean, default: false },
   },
   {
