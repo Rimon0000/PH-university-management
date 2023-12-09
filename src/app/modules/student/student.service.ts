@@ -21,21 +21,36 @@ const getAllStudentsFromDb = async (query: Record<string, unknown>) => {
     searchTerm = query.searchTerm as string;
   }
 
-  //chaining for using two find method
+  //chaining for using two find method(searching)
   const searchQuery = Student.find({$or: studentSearchableFields.map((field) =>({
     [field]: {$regex: searchTerm, $options: 'i'}
   }))});
 
   //filtering
-  const excludeFields = ['searchTerm']
+  const excludeFields = ['searchTerm', 'sort', 'limit']
 
   excludeFields.forEach((el) => delete queryObj[el])
   // console.log({query, queryObj});
 
-  const result = await searchQuery.find(queryObj)
+  const filterQuery =  searchQuery.find(queryObj)
   .populate('admissionSemester')
   .populate({path: 'academicDepartment', populate: {path: 'academicFaculty'}})
-  return result;
+
+  //sorting
+  let sort = '-createdAt';
+  if(query.sort){
+    sort = query.sort as string;
+  }
+  const sortQuery = filterQuery.sort(sort)
+
+  //limit
+  let limit = 1
+  if(query.limit){
+    limit = query.limit as number;
+  }
+
+  const limitQuery = await sortQuery.limit(limit)
+  return limitQuery;
 };
 
 //get single student
