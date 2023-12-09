@@ -7,20 +7,32 @@ import { TStudent } from './student.interface';
 
 //get all student
 const getAllStudentsFromDb = async (query: Record<string, unknown>) => {
+  console.log('base query', query);
+  const queryObj = {...query}  //copy
 
   //{email: {$regex: query.searchTerm, $options: 'i'}}
   //{address: {$regex: query.searchTerm, $options: 'i'}}
   //{'name.firstName': {$regex: query.searchTerm, $options: 'i'}}
+
+  const studentSearchableFields = ['email', 'name.firstName', 'presentAddress'];
 
   let searchTerm = '';
   if(query?.searchTerm){
     searchTerm = query.searchTerm as string;
   }
 
-
-  const result = await Student.find({$or: ['email', 'name.firstName', 'presentAddress'].map((field) =>({
+  //chaining for using two find method
+  const searchQuery = Student.find({$or: studentSearchableFields.map((field) =>({
     [field]: {$regex: searchTerm, $options: 'i'}
-  }))})
+  }))});
+
+  //filtering
+  const excludeFields = ['searchTerm']
+
+  excludeFields.forEach((el) => delete queryObj[el])
+  // console.log({query, queryObj});
+
+  const result = await searchQuery.find(queryObj)
   .populate('admissionSemester')
   .populate({path: 'academicDepartment', populate: {path: 'academicFaculty'}})
   return result;
