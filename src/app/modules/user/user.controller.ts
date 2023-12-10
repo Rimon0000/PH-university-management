@@ -15,7 +15,21 @@ const createStudent =  catchAsync(async(req, res) =>{
     })
 })
 
+//create Admin
+const createAdmin =  catchAsync(async(req, res) =>{
+    const {password, admin: adminData} = req.body
+
+   //will call service function to send this data
+   const result = await UserServices.createAdminIntoDb(password, adminData)
+    res.status(200).json({
+        success: true,
+        message: "Admin created successfully",
+        data: result
+    })
+})
+
 export const UserControllers = {
     createStudent,
+    createAdmin,
 
 }

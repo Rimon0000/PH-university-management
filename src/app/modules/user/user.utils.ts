@@ -4,6 +4,7 @@ import { User } from "./user.model";
 //find last student id
 const findLastStudentId =async () => {
     const lastStudent = await User.findOne({role:"student"},{id: 1, _id: -1}).sort({createdAt: -1}).lean()
+    // console.log('student',lastStudent);
     return lastStudent?.id ? lastStudent.id : undefined;
 }
 
@@ -27,5 +28,24 @@ export const generatedStudentId = async(payload: TAcademicSemester) =>{
     let incrementId = (parseInt(currentId) + 1).toString().padStart(4, '0');
 
     incrementId = `${payload.year}${payload.code}${incrementId}`
+    return incrementId;
+}
+
+//find last admin id
+const findLastAdminId =async () => {
+    const lastAdmin = await User.findOne({role:"admin"},{id: 1, _id: -1}).sort({createdAt: -1}).lean()
+    return lastAdmin?.id ? lastAdmin.id : undefined;
+}
+
+export const generateAdminId =async () => {
+    let currentId = (0).toString();
+
+    const lastAdminId = await findLastAdminId()
+    if(lastAdminId){
+        currentId = lastAdminId.substring(2);
+    }
+
+    let incrementId = (parseInt(currentId) + 1).toString().padStart(4, '0');
+    incrementId = `A-${incrementId}`;
     return incrementId;
 }
