@@ -81,7 +81,8 @@ const getAllStudentsFromDb = async (query: Record<string, unknown>) => {
 
 
   //for class uses
-  const studentQuery = new QueryBuilder(Student.find(), query)
+  const studentQuery = new QueryBuilder(Student.find().populate('admissionSemester')
+  .populate({path: 'academicDepartment', populate: {path: 'academicFaculty'}}), query)
   .search(studentSearchableFields).filter().sort().paginate().fields();
 
   const result = await studentQuery.modelQuery;
@@ -92,7 +93,7 @@ const getAllStudentsFromDb = async (query: Record<string, unknown>) => {
 
 //get single student
 const getSingleStudentFromDb = async (id: string) => {
-  const result = await Student.findOne({ id }).populate('admissionSemester')
+  const result = await Student.findById( id ).populate('admissionSemester')
   .populate({path: 'academicDepartment', populate: {path: 'academicFaculty'}})
 
   // const result = await Student.aggregate([{ $match: { id: id } }]);
@@ -133,7 +134,7 @@ const updateStudentFromDb = async (id:string, payload: Partial<TStudent>) => {
 
   // console.log(modifiedUpdatedData);
 
-  const result = await Student.findOneAndUpdate({ id }, modifiedUpdatedData, {new: true, runValidators: true})
+  const result = await Student.findByIdAndUpdate(id, modifiedUpdatedData, {new: true, runValidators: true})
   return result
 
 }
@@ -148,13 +149,16 @@ const deleteStudentFromDb = async (id: string) => {
     session.startTransaction()
 
     //Transaction-1 in Student
-    const deletedStudent = await Student.findOneAndUpdate({ id }, { isDeleted: true }, {new: true, session});
+    const deletedStudent = await Student.findByIdAndUpdate( id, { isDeleted: true }, {new: true, session});
     if(!deletedStudent){
       throw new AppError(httpStatus.BAD_REQUEST, "Failed to Delete Student !")
     }
 
-    //Transaction-1 in User
-    const deletedUser = await User.findOneAndUpdate({ id }, { isDeleted: true }, {new: true, session});
+    //get user _id from deletedStudent
+    const userId = deletedStudent.user;
+
+    //Transaction-2 in User
+    const deletedUser = await User.findByIdAndUpdate(userId, { isDeleted: true }, {new: true, session});
     if(!deletedUser){
       throw new AppError(httpStatus.BAD_REQUEST, "Failed to Delete User !")
     }
