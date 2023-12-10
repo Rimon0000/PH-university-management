@@ -114,5 +114,4 @@ const createStudentIntoDb = async (password: string, payload: TStudent) => {
   export const UserServices = {
     createStudentIntoDb,
     createAdminIntoDb,
-
   }
