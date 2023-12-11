@@ -10,7 +10,7 @@ import { TFaculty } from "./faculty.interface";
 //get all faculty
 const getAllFacultiesFromDb =async (query: Record<string, unknown>) => {
     //for class uses
-    const facultyQuery = new QueryBuilder(Faculty.find(), query)
+    const facultyQuery = new QueryBuilder(Faculty.find().populate('academicDepartment'), query)
     .search(facultySearchableFields).filter().sort().paginate().fields()
 
     const result = await facultyQuery.modelQuery
