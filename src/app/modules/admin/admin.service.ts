@@ -21,9 +21,19 @@ const getSingleAdminFromDb =async (id: string) => {
 
 //update single admin
 const updateAdminFromDb =async (id:string, payload: Partial<TAdmin>) => {
-    const result = await Admin.findByIdAndUpdate(id, payload, {new: true})
+    const {name, ...remainingAdminData} = payload
+    const modifiedUpdatedData: Record<string, unknown> = {...remainingAdminData, };
+
+    if(name && Object.keys(name).length){
+        for(const [key, value] of Object.entries(name)){
+          modifiedUpdatedData[`name.${key}`] = value;
+        }
+    }
+
+    const result = await Admin.findByIdAndUpdate(id, modifiedUpdatedData, {new: true, runValidators: true})
     return result;
 }
+
 
 //delete single admin
 const deleteAdminFromDb =async (id:string) => {
