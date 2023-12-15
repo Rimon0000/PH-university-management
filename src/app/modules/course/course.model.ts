@@ -7,6 +7,8 @@ const preRequisiteCoursesSchema = new Schema<TPreRequisiteCourses>({
         type: Boolean,
         default: false
     }
+},{
+    _id: false
 })
 
 const courseSchema = new Schema<TCourse>({
@@ -36,6 +38,8 @@ const courseSchema = new Schema<TCourse>({
         type: Boolean,
         default: false
     }
+},{
+    timestamps: true
 })
 
 export const Course = model<TCourse>('Course', courseSchema)
