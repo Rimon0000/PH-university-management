@@ -54,10 +54,25 @@ const deleteCourse = catchAsync(async(req, res) =>{
     })
 })
 
+
+//assign faculties inside course
+const assignFacultiesWithCourse = catchAsync(async(req, res) =>{
+    const {courseId} = req.params;
+    const {faculties} = req.body
+    const result = await CourseServices.assignFacultiesWithCourseIntoDb(courseId, faculties)
+    res.status(200).json({
+        success: true,
+        message: "Faculty is Assigned successfully",
+        data: result
+    })
+})
+
+
 export const CourseControllers = {
     createCourse,
     getAllCourses,
     getSingleCourse,
     updateCourse,
-    deleteCourse
+    deleteCourse,
+    assignFacultiesWithCourse
 }
