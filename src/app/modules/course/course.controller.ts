@@ -62,7 +62,7 @@ const assignFacultiesWithCourse = catchAsync(async(req, res) =>{
     const result = await CourseServices.assignFacultiesWithCourseIntoDb(courseId, faculties)
     res.status(200).json({
         success: true,
-        message: "Faculty is Assigned successfully",
+        message: "Faculties Assigned successfully",
         data: result
     })
 })

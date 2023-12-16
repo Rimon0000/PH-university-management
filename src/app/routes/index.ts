@@ -36,6 +36,10 @@ const moduleRoutes = [
         route: adminRoutes
     },
     {
+        path: '/faculties',
+        route: facultyRoutes
+    },
+    {
         path: '/courses',
         route: CourseRoutes
     }
