@@ -43,6 +43,7 @@ const updateCourseFromDb =async (id: string, payload: Partial<TCourse>) => {
 
         //check if there is any pre requisite course to update
         if(preRequisiteCourses && preRequisiteCourses.length > 0){
+            
         //filter out the deleted fields
         const deletedPreRequisites = preRequisiteCourses.filter(el => el.course && el.isDeleted)
         .map(el => el.course)
@@ -96,6 +97,16 @@ const assignFacultiesWithCourseIntoDb = async(id: string, payload: Partial<TCour
     return result;
 }
 
+//remove faculties
+const removeFacultiesFromCourseFromDb = async(id: string, payload: Partial<TCourseFaculty>) =>{
+    const result = await CourseFaculty.findByIdAndUpdate(id,
+        {
+        $pull: {faculties: {$in: payload}}
+        }, { new: true});
+
+    return result;
+}
+
 
 
 export const CourseServices = {
@@ -104,6 +115,7 @@ export const CourseServices = {
     getSingleCoursesFromDb,
     updateCourseFromDb,
     deleteCourseFromDb,
-    assignFacultiesWithCourseIntoDb
+    assignFacultiesWithCourseIntoDb,
+    removeFacultiesFromCourseFromDb
 
 }
