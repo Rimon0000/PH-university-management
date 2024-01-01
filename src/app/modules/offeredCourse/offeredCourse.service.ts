@@ -10,7 +10,7 @@ import { Faculty } from "../faculty/faculty.model";
 
 
 const createOfferedCourseIntoDb =async (payload:TOfferedCourse) => {
-    const {semesterRegistration, academicFaculty, academicDepartment, course, section, faculty} = payload;
+    const {semesterRegistration, academicFaculty, academicDepartment, course, section, faculty, days, startTime, endTime} = payload;
 
     //1. check if the semester Registration id is exists
     const isSemesterRegistrationExists = await SemesterRegistration.findById(semesterRegistration)
@@ -56,6 +56,24 @@ const createOfferedCourseIntoDb =async (payload:TOfferedCourse) => {
         throw new AppError(httpStatus.BAD_REQUEST, "Offered Course with same section is already exists!!")
     }
 
+    //get the schedule of the faculties
+    const assignedSchedules = await OfferedCourse.find({semesterRegistration, 
+        faculty, days: {$in: days}}).select('days startTime endTime')
+
+    const newSchedule = {days, startTime, endTime}
+
+    assignedSchedules.forEach((schedule) =>{
+        const existingStartTime = new Date(`1970-01-01T${schedule.startTime}`)
+        const existingEndTime = new Date(`1970-01-01T${schedule.endTime}`)
+        const newStartTime = new Date(`1970-01-01T${newSchedule.startTime}`)
+        const newEndTime = new Date(`1970-01-01T${newSchedule.endTime}`)
+
+        //10:30 - 12:30  exist
+        //11.30 - 1.30   new
+        if(newStartTime < existingEndTime && newEndTime > existingStartTime){
+            throw new AppError(httpStatus.CONFLICT, "This faculty is not available at that time! Please choose another Day or Time !!")
+        }
+    })
 
     const result = await OfferedCourse.create({...payload, academicSemester})
     return result;
