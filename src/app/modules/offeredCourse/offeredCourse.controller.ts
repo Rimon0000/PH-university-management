@@ -10,8 +10,20 @@ const createOfferedCourse = catchAsync(async(req, res) =>{
     })
 })
 
+//get all
 const getAllOfferedCourse = catchAsync(async(req, res) =>{
     const result = await offeredCourseServices.getOfferedCourseFromDb(req.query)
+    res.status(200).json({
+        success: true,
+        message: "Offered Course are retrieved successfully",
+        data: result
+    })
+})
+
+//get single
+const getSingleOfferedCourse = catchAsync(async(req, res) =>{
+    const id = req.params.id;
+    const result = await offeredCourseServices.getSingleOfferedCourseFromDb(id)
     res.status(200).json({
         success: true,
         message: "Offered Course is retrieved successfully",
@@ -35,5 +47,6 @@ const updateOfferedCourse = catchAsync(async(req, res) =>{
 export const offeredCourseControllers = {
     createOfferedCourse,
     getAllOfferedCourse,
+    getSingleOfferedCourse,
     updateOfferedCourse,
 }

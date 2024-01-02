@@ -89,6 +89,13 @@ const getOfferedCourseFromDb = async(query: Record<string, unknown>) =>{
 //get single Offered Course
 const getSingleOfferedCourseFromDb = async(id: string) =>{
     const result = await OfferedCourse.findById(id)
+    .populate('semesterRegistration')
+    .populate('academicSemester')
+    .populate('academicFaculty')
+    .populate('academicDepartment')
+    .populate('course')
+    .populate('faculty')
+    
     return result;
 }
 

@@ -8,6 +8,7 @@ const router = express.Router()
 
 router.post('/create-offered-course', validateRequest(offeredCourseValidations.createOfferedCourseValidationSchema), offeredCourseControllers.createOfferedCourse)
 router.get('/', offeredCourseControllers.getAllOfferedCourse)
+router.get('/:id', offeredCourseControllers.getSingleOfferedCourse)
 router.patch('/:id', validateRequest(offeredCourseValidations.updateOfferedCourseValidationSchema), offeredCourseControllers.updateOfferedCourse)
 
 
